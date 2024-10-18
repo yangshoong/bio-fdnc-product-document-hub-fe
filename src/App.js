@@ -10,9 +10,22 @@ import PrivateRoute from './components/PrivateRoute';
 import useAuthStore from './store/authStore';
 import SignupPage from './pages/SignupPage';
 import RMDStandardPage from './pages/RMDStandardPage';
-import Header from './components/Header'; // Header 컴포넌트 추가
+import Header from './components/Header';
 import theme from './theme';
 import AmorepacificAudit from './pages/AmorepacificAudit';
+import RecordPage from './pages/RecordPage';
+import RecordDetailPage from './pages/RecordDetailPage';
+import UserManagementPage from './pages/UserManagementPage';
+
+function AdminRoute({ children }) {
+  const user = useAuthStore((state) => state.user);
+
+  if (!user || user.role !== 'admin') {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+}
 
 function App() {
   const user = useAuthStore(state => state.user);
@@ -20,7 +33,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <Header /> {/* 모든 페이지에 공통으로 헤더 추가 */}
+        <Header />
         {user && <Navbar />}
         <Routes>
           <Route path="/login" element={user ? <Navigate to="/" replace /> : <LoginPage />} />
@@ -40,6 +53,21 @@ function App() {
             <PrivateRoute>
               <AmorepacificAudit />
             </PrivateRoute>
+          } />
+          <Route path="/records" element={
+            <PrivateRoute>
+              <RecordPage />
+            </PrivateRoute>
+          } />
+          <Route path="/records/:id" element={
+            <PrivateRoute>
+              <RecordDetailPage />
+            </PrivateRoute>
+          } />
+          <Route path="/user-management" element={
+            <AdminRoute>
+              <UserManagementPage />
+            </AdminRoute>
           } />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

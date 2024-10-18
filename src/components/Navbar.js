@@ -69,9 +69,9 @@ const navItems = [
       { path: '/standard/rmd-standard', label: '원료제조팀규정' },
     ],
   },
-  { path: '/record', label: 'Record', icon: <DescriptionIcon />, disabled: true },
+  { path: '/records', label: 'Record', icon: <DescriptionIcon /> }, // 레코드 항목 활성화
   { path: '/audit', label: 'Audit', icon: <AssignmentIcon />, disabled: true },
-  { path: '/user', label: 'User', icon: <PersonIcon />, disabled: true },
+  { path: '/user', label: 'User', icon: <PersonIcon />}
 ];
 
 
@@ -80,6 +80,7 @@ function Navbar() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const { user, logout } = useAuthStore();
+  const isAdmin = user?.role === 'admin';
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const timeoutRef = useRef(null);
 
@@ -158,7 +159,7 @@ function Navbar() {
                     <Paper
                       onMouseEnter={handleSubMenuEnter}
                       onMouseLeave={handleSubMenuLeave}
-                      sx={{ mt: '-8px', ml: '4px', width: '200px' }}  // width 추가
+                      sx={{ mt: '-8px', ml: '4px', width: '200px' }}
                     >
                       <List dense>
                         {item.subItems.map((subItem) => (
